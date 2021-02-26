@@ -1,4 +1,4 @@
-# Bun - Tiny NodeJS Web Server
+# Bun - tiny nodejs web framework
 
 ### its about 4KB small
 
@@ -7,9 +7,9 @@
 ## Features
 
 - middleware
--- easy setup after or before routing
+- - easy setup after or before routing
 - dynamic routing
-- 
+
 ## properties
 
 ```

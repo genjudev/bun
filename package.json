@@ -9,11 +9,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/larsonnn/bun.git"
+  },
   "keywords": [
     "webserver",
     "server",
     "framework"
   ],
   "author": "Lars Feldeisen <lars@feldeisen.de>",
-  "license": "GPL-2.0-only"
+  "license": "GPL-2.0-only",
+  "bugs": {
+    "url": "https://github.com/larsonnn/bun/issues"
+  },
+  "homepage": "https://github.com/larsonnn/bun#readme"
 }

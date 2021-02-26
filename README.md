@@ -9,7 +9,29 @@
 - middleware
 -- easy setup after or before routing
 - dynamic routing
+- 
+## properties
 
+```
+https://nodejs.org/docs/latest-v14.x/api/http.html#http_class_http_clientreques
+req (request object)
+  .body // post body
+  .rawQueries // queries not an object yet
+  .params // dynamic routing object
+  
+https://nodejs.org/docs/latest-v14.x/api/http.html#http_class_http_incomingmessage
+res (response object)
+  .setHeader() // set any headers
+  .status() // set statuscode
+  .send() // string body
+  
+you can use it like this
+  console.log(req.body);
+  console.log(req.params.id) // /users/:id/
+  res.setHeader("Content-Type", "application/json")
+  res.status(200).send(JSON.stringify({ message: "message"}));
+
+```
 ## usage
 
 ```js
@@ -28,7 +50,7 @@ bun.before((req, res) => {
 bun.before([(req, res) => (req.newstuff = "change it")]);
 bun.after((req, res) => {
   if (res.writeStatus === 200) {
-    res.writeStatus = 400; //trolling
+    res.status(400); //trolling
   }
 });
 

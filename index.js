@@ -99,16 +99,11 @@ bun.on("request", async (req, res) => {
     })
     .on("end", async () => {
       req.body = Buffer.concat(req.body).toString();
-      // prepare res
-      res.defaultHeader
-        ? bun.defaultResponseHeader
-        : { "Content-Type": "application/json" };
 
       res.status = status(res);
       res.send = send(res);
 
       // middleware - before
-
       try {
         await middleware(req, res, bun.before());
       } catch (e) {
@@ -117,14 +112,13 @@ bun.on("request", async (req, res) => {
         res.end("");
       }
 
-      // actual routing and running controller
+      // actual routing
       const ep = pipe(req, res);
 
       ep && (await ep(req, res));
       if (!ep) res.status(404).send("");
 
       // middleware - after
-
       try {
         await middleware(req, res, bun.after());
       } catch (e) {

@@ -1,5 +1,5 @@
 {
-  "name": "bun",
+  "name": "bunserver",
   "version": "0.0.5",
   "description": "tiny web server framework",
   "main": "index.js",

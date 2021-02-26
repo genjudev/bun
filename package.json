@@ -1,0 +1,19 @@
+{
+  "name": "bun",
+  "version": "0.0.5",
+  "description": "tiny web server framework",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "webserver",
+    "server",
+    "framework"
+  ],
+  "author": "Lars Feldeisen <lars@feldeisen.de>",
+  "license": "GPL-2.0-only"
+}

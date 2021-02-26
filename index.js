@@ -10,7 +10,6 @@ const _funList = () => {
 };
 
 const status = (res) => {
-  let status = 200;
   return (status) => {
     res.writeStatus = status;
     return res;
@@ -79,8 +78,7 @@ const pipe = (req) => {
   return fun;
 };
 
-/* bun
- */
+/* bun */
 const bun = http.createServer();
 // defaults
 bun.prefix = "";
@@ -91,7 +89,6 @@ bun.after = _funList();
 
 bun.on("request", async (req, res) => {
   //data
-
   req.body = [];
   req
     .on("data", async (chunk) => {
@@ -99,7 +96,6 @@ bun.on("request", async (req, res) => {
     })
     .on("end", async () => {
       req.body = Buffer.concat(req.body).toString();
-
       res.status = status(res);
       res.send = send(res);
 
@@ -139,9 +135,7 @@ bun.on("clientError", (err, socket) => {
   socket.end("HTTP/1.1 400 Bad Request\r\n\r\n");
 });
 
-/* SETUP AND START
- * its important to start bun with 'start' to setup the routes.
- */
+/* SETUP AND START */
 bun.start = (PORT, HOST) => {
   // add prefix to route
   if (bun.prefix) {

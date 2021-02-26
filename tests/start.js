@@ -106,8 +106,9 @@ console.log("Started Test");
     method: m,
   };
   const req = http.request(options, (res) => {
-    console.log("STATUS:", res.statusCode);
     assert.strictEqual(200, res.statusCode);
   });
   req.end();
 });
+
+process.exit(1);

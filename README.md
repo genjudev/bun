@@ -6,8 +6,8 @@
 
 ## Features
 
-- tiny tiny tiny about 4KB
 - middleware
+-- easy setup after or before routing
 - dynamic routing
 
 ## usage

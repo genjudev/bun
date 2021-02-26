@@ -1,6 +1,6 @@
 {
   "name": "bunserver",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "tiny web server framework",
   "main": "index.js",
   "directories": {

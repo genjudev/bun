@@ -57,18 +57,34 @@ const pipe = (req) => {
     const routePaths = bun.routes[ri].path.split("/").filter(Boolean);
     if (bun.routes[ri].method === undefined) bun.routes[ri].method = "GET";
     if (!bun.routes[ri].method.includes(req.method)) {
-      return;
+      continue;
+    }
+    if(!routePaths.includes("*") && !routePaths.includes(".*") && routePaths.length !== url.length) {
+      continue;
     }
     if (routePaths.length === 0 && url.length === 0) {
       fun = bun.routes[ri].fun;
       break;
     }
     for (let rpi = 0; rpi < routePaths.length; rpi++) {
+      if (routePaths[rpi] === url[rpi]) {
+
+        if(routePaths.length === 1 && url.length === 1) {
+          fun = bun.routes[ri].fun;
+          break;
+        }
+        if (rpi > 0 && url.length - 1 > 0 && rpi === url.length - 1) {
+          fun = bun.routes[ri].fun;
+          break;
+        }
+        continue;
+      }
+      if(routePaths[rpi] !== undefined && url[rpi] === undefined){
+        break;
+      }
       if (routePaths[rpi] === ".*") {
-        console.log(url);
         const dotAt = url[url.length - 1].indexOf(".");
-        if(dotAt > -1 && dotAt < url[url.length-1].length -2) {
-          console.log(dotAt, url[url.length-1]);
+        if (dotAt > -1 && dotAt < url[url.length - 1].length - 2) {
           fun = bun.routes[ri].fun;
           break;
         }
@@ -77,14 +93,16 @@ const pipe = (req) => {
         fun = bun.routes[ri].fun;
         break;
       }
-      if (routePaths[rpi] === ":") {
+
+      if (routePaths[rpi].charAt(0) === ":") {
         req.params = req.params || {};
         req.params[routePaths[rpi].substring(1)] = url[rpi];
+        continue;
       }
-
       if (routePaths[rpi] !== url[rpi]) {
         break;
       }
+
       if (url[rpi] === undefined) {
         break;
       }

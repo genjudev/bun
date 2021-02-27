@@ -5,8 +5,11 @@ const bun = require("../index");
 const get = [
   {
     path: "/user/:id/profile",
-    fun: async (req, res) =>
-      res.status(200).send(JSON.stringify({ message: req.params.id })),
+    fun: async (req, res) => {
+      console.log(req.params, req.url);
+      res.status(200).send(JSON.stringify({ message: req.params.id }));
+
+    },
     method: "GET",
   },
   {
@@ -64,11 +67,11 @@ bun.start(8000, "0.0.0.0");
 
 console.log("Started Test");
 
-["GET", "POST", "PUT", "PATCH", "HEAD", "DELETE", "OPTIONS"].map((m) => {
+["GET"].map((m) => {
   const options = {
     host: "127.0.0.1",
     port: 8000,
-    path: "/api2",
+    path: "/api2/",
     method: m,
   };
   const req = http.request(options, (res) => {

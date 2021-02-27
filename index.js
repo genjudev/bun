@@ -65,9 +65,10 @@ const pipe = (req) => {
     }
     for (let rpi = 0; rpi < routePaths.length; rpi++) {
       if (routePaths[rpi] === ".*") {
-        const dot =
-          url[url.length - 1].indexOf(".") < url[url.length - 1].length - 2;
-        if (dot) {
+        console.log(url);
+        const dotAt = url[url.length - 1].indexOf(".");
+        if(dotAt > -1 && dotAt < url[url.length-1].length -2) {
+          console.log(dotAt, url[url.length-1]);
           fun = bun.routes[ri].fun;
           break;
         }

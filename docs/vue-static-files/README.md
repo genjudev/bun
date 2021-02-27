@@ -1,12 +1,5 @@
 # serve static and wildcard files example
 
-### nginx
-```nginx
-location / {
-  try_files $uri $uri/ /index.html;
-}
-```
-
 ### bun vue
 ```js
 const bun = require("bunserver");

@@ -29,7 +29,6 @@
   },
   "homepage": "https://github.com/larsonnn/bun#readme",
   "devDependencies": {
-    "http-terminator": "^3.0.0",
     "supertest": "^6.1.3"
   }
 }

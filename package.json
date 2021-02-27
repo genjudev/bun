@@ -14,8 +14,7 @@
     "url": "git+ssh://git@github.com/larsonnn/bun.git"
   },
   "files": [
-    "index.js",
-    "tests"
+    "index.js"
   ],
   "keywords": [
     "webserver",

@@ -2,8 +2,6 @@
 
 # Bun - tiny nodejs web framework
 
-### its about 4KB small
-
 ### WIP
 
 ## Features

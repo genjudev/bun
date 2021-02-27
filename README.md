@@ -1,3 +1,5 @@
+![main](https://github.com/larsonnn/bun/actions/workflows/main.yml/badge.svg?branch=main)
+
 # Bun - tiny nodejs web framework
 
 ### its about 4KB small

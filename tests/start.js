@@ -110,5 +110,3 @@ console.log("Started Test");
   });
   req.end();
 });
-
-process.exit(1);

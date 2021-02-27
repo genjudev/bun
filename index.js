@@ -1,3 +1,4 @@
+const { DH_UNABLE_TO_CHECK_GENERATOR } = require("constants");
 const http = require("http");
 
 const _funList = () => {
@@ -52,29 +53,42 @@ const pipe = (req) => {
 
   // handle route. fun is the function which will be used if specific route hits.
   let fun = null;
-  bun.routes.map((r) => {
-    const routeUrls = r.path.split("/").filter(Boolean);
-    if (r.method === undefined) r.method = "GET";
-    if (!r.method.includes(req.method)) {
+  for (let ri = 0; ri < bun.routes.length; ri++) {
+    const routePaths = bun.routes[ri].path.split("/").filter(Boolean);
+    if (bun.routes[ri].method === undefined) bun.routes[ri].method = "GET";
+    if (!bun.routes[ri].method.includes(req.method)) {
       return;
     }
-
-    if (routeUrls.length > 0 && routeUrls.length === url.length) {
-      const compareToUrl = routeUrls.every((val, index) => {
-        if (val.charAt(0) === ":") {
-          req.params = req.params || {};
-          req.params[val.substring(1)] = url[index];
-          return true;
-        }
-        return val === url[index];
-      });
-      if (compareToUrl) {
-        fun = r.fun;
-      }
-    } else if (routeUrls.length === 0 && url.length === 0) {
-      fun = r.fun;
+    if (routePaths.length === 0 && url.length === 0) {
+      fun = bun.routes[ri].fun;
+      break;
     }
-  });
+    for (let rpi = 0; rpi < routePaths.length; rpi++) {
+      if (routePaths[rpi] === ".*") {
+        const dot =
+          url[url.length - 1].indexOf(".") < url[url.length - 1].length - 2;
+        if (dot) {
+          fun = bun.routes[ri].fun;
+          break;
+        }
+      }
+      if (routePaths[rpi] === "*") {
+        fun = bun.routes[ri].fun;
+        break;
+      }
+      if (routePaths[rpi] === ":") {
+        req.params = req.params || {};
+        req.params[routePaths[rpi].substring(1)] = url[rpi];
+      }
+
+      if (routePaths[rpi] !== url[rpi]) {
+        break;
+      }
+      if (url[rpi] === undefined) {
+        break;
+      }
+    }
+  }
   return fun;
 };
 
@@ -124,11 +138,7 @@ bun.on("request", async (req, res) => {
       }
 
       res.writeHead(res.writeStatus);
-      res.end(
-        typeof res.writeBody === "string"
-          ? res.writeBody
-          : JSON.stringify(res.writeBody)
-      );
+      res.end(res.writeBody);
     });
 });
 bun.on("clientError", (err, socket) => {

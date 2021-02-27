@@ -127,23 +127,30 @@ bun.after = _funList();
 
 bun.on("request", async (req, res) => {
   //data
-  req.body = [];
+  let rawBody = [];
   req
     .on("data", async (chunk) => {
-      req.body.push(chunk);
+      rawBody.push(chunk);
     })
     .on("end", async () => {
-      req.body = Buffer.concat(req.body).toString();
+      req.body = Buffer.concat(rawBody).toString();
+      if (req.headers["content-type"] === "application/json") {
+        try {
+          req.json = JSON.parse(req.body);
+        } catch {
+          res.writeHead(400);
+          res.end("Wrong content");
+          return;
+        }
+      }
       res.status = status(res);
       res.send = send(res);
 
       // middleware - before
       try {
         await middleware(req, res, bun.before());
-        res.status(e.status || 500);
-        res.end("");
       } catch (e) {
-        console.log(e);
+        console.error(e);
         res.writeHead(e.status || 500, e.header || {});
         res.end(e.body || res.writeBody || "");
         return;
@@ -161,7 +168,7 @@ bun.on("request", async (req, res) => {
         res.writeHead(res.writeStatus);
         res.end(res.writeBody || "");
       } catch (e) {
-        console.log(e);
+        console.error(e);
         res.writeHead(e.status || 500, e.header || {});
         res.end(e.body || res.writeBody || "");
         return;
@@ -185,6 +192,29 @@ bun.start = (PORT, HOST) => {
       r.path = `${prefix}${r.path.charAt(0) == "/" ? r.path : "/" + r.path}`;
     });
   }
+
+  const sockets = new Set();
+
+  bun.on("connection", (socket) => {
+    sockets.add(socket);
+
+    socket.on("close", () => {
+      sockets.delete(socket);
+    });
+  });
+
+  /**
+   * Forcefully terminates HTTP server.
+   */
+  bun.terminate = (callback) => {
+    for (const socket of sockets) {
+      socket.destroy();
+
+      sockets.delete(socket);
+    }
+
+    bun.close(callback);
+  };
 
   bun.listen(
     PORT || process.env.PORT || 8000,

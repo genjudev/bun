@@ -44,12 +44,6 @@ const routes = [
 
 bun.routes = routes;
 
-bun.before([
-  async (req, res) => {
-    res.setHeader("Content-Type", "application/json");
-    req.test = "This text needs to appear";
-  },
-]);
 bun.after([
   async (req, res) => {
     if (res.writeStatus == 200) {

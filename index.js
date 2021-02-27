@@ -28,7 +28,10 @@ const middleware = async (req, res, doThis) => {
         try {
           await doThis[i](req, res);
         } catch (e) {
-          throw e;
+          if (e.status) {
+            throw { status: e.status, body: e.body, header: e.header };
+          }
+          throw { status: 500 };
         }
       } else if (typeof doThis[i] == "object") {
         req = Object.assign(req, doThis[i]);
@@ -58,7 +61,11 @@ const pipe = (req) => {
     if (!bun.routes[ri].method.includes(req.method)) {
       continue;
     }
-    if(!routePaths.includes("*") && !routePaths.includes(".*") && routePaths.length !== url.length) {
+    if (
+      !routePaths.includes("*") &&
+      !routePaths.includes(".*") &&
+      routePaths.length !== url.length
+    ) {
       continue;
     }
     if (routePaths.length === 0 && url.length === 0) {
@@ -67,8 +74,7 @@ const pipe = (req) => {
     }
     for (let rpi = 0; rpi < routePaths.length; rpi++) {
       if (routePaths[rpi] === url[rpi]) {
-
-        if(routePaths.length === 1 && url.length === 1) {
+        if (routePaths.length === 1 && url.length === 1) {
           fun = bun.routes[ri].fun;
           break;
         }
@@ -78,7 +84,7 @@ const pipe = (req) => {
         }
         continue;
       }
-      if(routePaths[rpi] !== undefined && url[rpi] === undefined){
+      if (routePaths[rpi] !== undefined && url[rpi] === undefined) {
         break;
       }
       if (routePaths[rpi] === ".*") {
@@ -134,10 +140,13 @@ bun.on("request", async (req, res) => {
       // middleware - before
       try {
         await middleware(req, res, bun.before());
-      } catch (e) {
-        console.error(e);
-        res.status(500);
+        res.status(e.status || 500);
         res.end("");
+      } catch (e) {
+        console.log(e);
+        res.writeHead(e.status || 500, e.header || {});
+        res.end(e.body || res.writeBody || "");
+        return;
       }
 
       // actual routing
@@ -149,14 +158,14 @@ bun.on("request", async (req, res) => {
       // middleware - after
       try {
         await middleware(req, res, bun.after());
+        res.writeHead(res.writeStatus);
+        res.end(res.writeBody || "");
       } catch (e) {
-        console.error("ERROR");
-        res.writeHead(500);
-        res.end();
+        console.log(e);
+        res.writeHead(e.status || 500, e.header || {});
+        res.end(e.body || res.writeBody || "");
+        return;
       }
-
-      res.writeHead(res.writeStatus);
-      res.end(res.writeBody);
     });
 });
 bun.on("clientError", (err, socket) => {

@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Testing
+name: nodejs v14
 
 # Controls when the action will run. 
 on:
@@ -24,5 +24,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          node-version: '14'
       - run: npm ci
       - run: npm test

@@ -35,6 +35,11 @@ const routes = [
     },
     method: "POST,HEAD",
   },
+  {
+    path: "/test/wild/*",
+    method: "GET",
+    fun: async (req, res ) => res.status(200).send('')
+  }
 ];
 
 bun.routes = routes;
@@ -106,6 +111,20 @@ console.log("Started Test");
     host: "127.0.0.1",
     port: 8000,
     path: "/api2/user/123/profile",
+    method: m,
+  };
+  const req = http.request(options, (res) => {
+    assert.strictEqual(200, res.statusCode);
+  });
+  req.end();
+});
+
+// wildcard
+["GET"].map((m) => {
+  const options = {
+    host: "127.0.0.1",
+    port: 8000,
+    path: "/api2/test/wild/test2",
     method: m,
   };
   const req = http.request(options, (res) => {

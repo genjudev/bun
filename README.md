@@ -10,6 +10,12 @@
 - - easy setup after or before routing
 - dynamic routing
 
+## install
+
+```sh
+npm i bunserver
+```
+
 ## properties
 
 ```

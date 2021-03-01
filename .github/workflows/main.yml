@@ -45,19 +45,3 @@ jobs:
           node-version: '15'
       - run: npm ci
       - run: npm test
-  publish-npm:
-    needs:
-      - build
-      - build15
-    runs-on: ubuntu-latest
-    env:
-      NPM_TOKEN: ${{secrets.NPM_TOKEN}}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 14
-          registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm login
-      - run: npm publish

@@ -1,4 +1,4 @@
-![main](https://github.com/larsonnn/bun/actions/workflows/main.yml/badge.svg?branch=main) ![main](https://github.com/larsonnn/bun/actions/workflows/node15.yml/badge.svg?branch=main)
+![main](https://github.com/larsonnn/bun/actions/workflows/main.yml/badge.svg?branch=main)
 
 # Bun - tiny nodejs web framework
 

@@ -59,4 +59,5 @@ jobs:
           node-version: 14
           registry-url: https://registry.npmjs.org/
       - run: npm ci
+      - run: npm login
       - run: npm publish

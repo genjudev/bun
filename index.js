@@ -137,8 +137,7 @@ bun.on("request", async (req, res) => {
       if (req.headers["content-type"] === "application/json") {
         try {
           req.json = JSON.parse(req.body);
-        } catch (e) {
-          console.error(e);
+        } catch  {
           res.writeHead(400);
           res.end("Wrong content");
           return;

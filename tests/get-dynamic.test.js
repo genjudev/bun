@@ -18,7 +18,7 @@ describe("Server", () => {
     bun.terminate();
     done();
   });
-  it("use dyn : routing", (done) => {
+  it("use wildcard * routing", (done) => {
     request(bun).get("/123/test").expect(200, done);
   });
 });
